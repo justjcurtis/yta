@@ -1,0 +1,28 @@
+{
+  "name": "yta",
+  "version": "0.0.1",
+  "description": "yta is a configerable youtube archiver",
+  "main": "./src/cli.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justjcurtis/yta.git"
+  },
+  "keywords": [
+    "youtube",
+    "download",
+    "archive",
+    "cli"
+  ],
+  "author": "justjcurtis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/justjcurtis/yta/issues"
+  },
+  "homepage": "https://github.com/justjcurtis/yta#readme",
+  "dependencies": {
+    "commander": "^5.1.0"
+  }
+}
