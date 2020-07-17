@@ -6,7 +6,7 @@ const cCommand = async (channelUrl, args) =>{
     const configService = new ConfigService();
     const archiveService = new ArchiveService();
     let monitor = configService.monitor();
-    
+
     let opts = {
         min:args.min,
         max:args.max,
@@ -28,10 +28,11 @@ const cCommand = async (channelUrl, args) =>{
     if(ch == undefined){
         ch = new Channel(channelUrl)
         if(args.from == undefined){
+            console.log('un')
             args.from = new Date().toJSON().slice(0, 10)
             opts.from = args.from
-            await ch.init(opts);
         }
+        await ch.init(opts);
     }else{
         if(args.min){
             ch.min = args.min                
@@ -52,6 +53,7 @@ const cCommand = async (channelUrl, args) =>{
             ch.tagsKeywords = args.tagsKeywords
         }
     }
+    console.log(ch)
     archiveService.destroyRecord(ch);
     monitor.set(ch.name, ch.toJson());
 }
