@@ -8,9 +8,10 @@ const { sleep } = require('../helpers/shared')
 
 const bCommand = async (args) =>{
     if(args.interval == undefined){
-        args.interval = 1000*60*60*24
+        args.interval = 24
     }
-    const interval = args.interval < 1 ? 1000*60*60*2 : Math.round(1000*60*60*args.interval)
+    const interval = args.interval < 1 ? 60 : Math.round(60*args.interval)
+    console.log(`Checking for updates every ${interval/60} hours`)
     while(true){
         let now = new Date().toLocaleString();
         let monitor = configService.monitor();
@@ -43,7 +44,9 @@ const bCommand = async (args) =>{
             console.log(`${now} - No updates found`)
         }
 
-        await sleep(interval)
+        for(let i = 0; i< interval; i++){
+            await sleep(1000*60)
+        }
     }
 }
 module.exports = {
