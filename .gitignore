@@ -1,3 +1,5 @@
 node_modules
 *.lock
 .vscode/
+debug.js
+package-lock.json
