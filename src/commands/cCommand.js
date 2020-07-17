@@ -53,7 +53,7 @@ const cCommand = async (channelUrl, args) =>{
             ch.tagsKeywords = args.tagsKeywords
         }
     }
-    console.log(ch)
+    
     archiveService.destroyRecord(ch);
     monitor.set(ch.name, ch.toJson());
 }
