@@ -3,7 +3,7 @@ const configService = new ConfigService()
 
 const lsCommand = () =>{
     let monitor = configService.monitor();
-    console.log(JSON.stringify(monitor.all))
+    console.log(monitor.all)
 }
 module.exports = {
     lsCommand

@@ -4,7 +4,7 @@ const cli = require('commander')
 const { date2str } = require('./helpers/shared')
 const ConfigService = require('./services/configService')
 const configService = new ConfigService();
-let config = configService.config
+let config = configService.config()
 
 const {
     bCommand
@@ -58,7 +58,7 @@ cli
     // .option('-f, --format <format>', 'Set output format of downloads (defaults to mp4) available formats: (mp4, mp3)')
     .action(function (channelUrl, args) {
         if(args.from != undefined){
-            args.from = date2str(new Date(args.from), 'YYYY-MM-DD')
+            args.from = date2str(new Date(args.from), 'yyyy-MM-dd')
         }
         cCommand(channelUrl, args)
     })

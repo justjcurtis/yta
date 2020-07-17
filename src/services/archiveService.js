@@ -40,7 +40,7 @@ class ArchiveService{
             }
         }
 
-        let latest = await channel.videos(1);
+        let latest = await channel.videos(50);
 
         for(let i = 0; i< latest.length; i++){
             let video = latest[i]
@@ -54,7 +54,7 @@ class ArchiveService{
 
     async updateChannel(channel){
         let ledger = configService.ledger();
-        let latest = await channel.videos(1);
+        let latest = await channel.videos(50);
 
         if(!ledger.all[channel.id]){
             ledger.set(channel.id, {
@@ -86,7 +86,7 @@ class ArchiveService{
         for(let i = 0; i< channelLedger.queue.length; i++){
             let video = channelLedger.queue[i];
             if(video.status == status[1]){
-                downloadTasks.push(youtubeService.downloadVideo(video.url, outputDir, true))
+                downloadTasks.push(video)
             }
         }
 
@@ -158,15 +158,18 @@ class ArchiveService{
                     continue
                 }
             }
-            downloadTasks.push(youtubeService.downloadVideo(info.videoDetails.video_url, outputDir, true))
             video.url = info.videoDetails.video_url;
-            video.status = status[1];
+            downloadTasks.push(video)
         }
-        await Promise.allSettled(downloadTasks)
+        for(let i = 0; i< downloadTasks.length; i++){
+            let video = downloadTasks[i];
+            video.status = status[1]
+            await youtubeService.downloadVideo(video.url, outputDir, true)
+            video.status = [2]
+        }
         for(let i = 0; i< channelLedger.queue.length; i++){
             let video = channelLedger.queue[i];
-            if(video.status == status[1]){
-                video.status = status[2]
+            if(video.status == status[2]){
                 channelLedger.done.push(video)
             }
             if(video.status == status[3]){

@@ -5,6 +5,7 @@ const ConfigService = require('./configService')
 const configService = new ConfigService();
 const localStorage = require('../services/localStorage')
 const cliProgress = require('cli-progress');
+const sanitize = require('sanitize-filename')
 const path = require('path');
 
 const getVideos = async (channelId, n=10) =>{
@@ -60,9 +61,9 @@ const downloadVideo = (url, outputDir, silent = false) =>{
     return new Promise(async (resolve, reject)=>{
         let info = await getVideoInfo(url)
         
-        outputDir = path.join(outputDir, info.videoDetails.author.name)
+        outputDir = path.join(outputDir, sanitize(info.videoDetails.author.name))
         localStorage.ensureDirExists(outputDir)
-        let outputPath = path.join(outputDir, `${info.videoDetails.title}.mp4`)
+        let outputPath = path.join(outputDir, sanitize(`${info.videoDetails.title}.mp4`))
 
         let format;
         for (let i = 0; i < info.formats.length; i++) {
