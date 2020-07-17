@@ -28,7 +28,6 @@ const cCommand = async (channelUrl, args) =>{
     if(ch == undefined){
         ch = new Channel(channelUrl)
         if(args.from == undefined){
-            console.log('un')
             args.from = new Date().toJSON().slice(0, 10)
             opts.from = args.from
         }

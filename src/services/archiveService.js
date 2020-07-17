@@ -65,15 +65,19 @@ class ArchiveService{
         }
         let channelLedger = ledger.all[channel.id];
 
+        let newVideosFound = false;
         latest.forEach(video => {
             if(!channelLedger.all.includes(video.id)){
+                newVideosFound = true;
                 video.status = status[0];
                 !channelLedger.all.push(video.id)
                 !channelLedger.queue.push(video)
             }
         });
-        channelLedger = await this.processQueue(channelLedger, channel);
-        ledger.set(channel.id, channelLedger);
+
+        let [newChannelLedger, downloadOccured] = await this.processQueue(channelLedger, channel);
+        ledger.set(channel.id, newChannelLedger);
+        return {downloadOccured, newVideosFound}
     }
 
     async processQueue(channelLedger, channel){
@@ -161,23 +165,23 @@ class ArchiveService{
             video.url = info.videoDetails.video_url;
             downloadTasks.push(video)
         }
+        let downloadOccured = false;
         for(let i = 0; i< downloadTasks.length; i++){
             let video = downloadTasks[i];
             video.status = status[1]
             await youtubeService.downloadVideo(video.url, outputDir, true)
+            downloadOccured = true;
             video.status = [2]
+            channelLedger.done.push(video)
         }
         for(let i = 0; i< channelLedger.queue.length; i++){
             let video = channelLedger.queue[i];
-            if(video.status == status[2]){
-                channelLedger.done.push(video)
-            }
             if(video.status == status[3]){
                 channelLedger.done.push(video)
             }
         }
         channelLedger.queue = []
-        return channelLedger;
+        return [channelLedger, downloadOccured];
     }
 }
 

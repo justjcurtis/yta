@@ -95,6 +95,7 @@ cli
     .command('Run')
     .alias('r')
     .description('Run yta for 1 update cycle and then exit after all downloads complete.')
+    .option('-p, --progressBarHidden', 'Hides progress bar')
     .action(function (args) {
         rCommand(args)
     })

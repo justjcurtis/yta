@@ -14,14 +14,29 @@ const rCommand = async (args) =>{
         let channelJson = monitor.all[key];
         channels.push(Channel.fromJson(channelJson))
     };
-    const progress = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
-    progress.start(channels.length, 0)
+    if(channels.length == 0){
+        return;
+    }
+    let progress;
+    if(args.progressBarHidden == undefined){
+        progress = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+        progress.start(channels.length, 0)
+    }
     for(let i = 0; i<channels.length; i++){
         let channel = channels[i]
-        await archiveService.updateChannel(channel)
-        progress.update(i+1)
+        console.log(`Checking for updates for ${channel.name} - ${new Date().toLocaleString()}`)
+        let { downloadOccured, newVideosFound } = await archiveService.updateChannel(channel)
+        console.log(`${newVideosFound ? 'New videos': 'No new videos'} found for ${channel.name}`)
+        console.log(`${downloadOccured ? 'New Videos downloaded':'No new videos downloaded'} for ${channel.name}`)
+        console.log('')
+        if(args.progressBarHidden == undefined){
+            progress.update(i+1)
+        }
     };
-    progress.stop()
+
+    if(args.progressBarHidden == undefined){
+        progress.stop()
+    }
 }
 
 module.exports = {
